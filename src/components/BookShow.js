@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import BooksContext from "../context/books";
 import BookEdit from "./BookEdit";
 
-function BookShow({ book, onDelete, onEdit }) {
+function BookShow({ book }) {
   const [showEdit, setShowEdit] = useState(false);
+  const { deleteBookById } = useContext(BooksContext);
+
   const handleDeleteClick = () => {
-    onDelete(book.id);
+    deleteBookById(book.id);
   };
 
   const handleEditClick = () => {
@@ -13,11 +16,12 @@ function BookShow({ book, onDelete, onEdit }) {
 
   // communicate this down as prop 'onSubmit' to bookEdit component
   // do multiple things when submitted, get back id and new title
-  const handleSubmit = (id, newTitle) => {
+  const handleSubmit = () => {
     setShowEdit(false);
-    onEdit(id, newTitle);
   };
 
+  // book show still needs to know when to hide / show edit component- still need onSubmit 
+  // still need to call onSubmit when needed 
   let content = <h3>{book.title}</h3>;
   if (showEdit) {
     content = <BookEdit onSubmit={handleSubmit} book={book} />;
